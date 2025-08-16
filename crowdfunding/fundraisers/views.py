@@ -24,6 +24,7 @@ class FundraiserList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    
 class FundraiserDetail(APIView):
     def get_object(self, pk):
         try:
