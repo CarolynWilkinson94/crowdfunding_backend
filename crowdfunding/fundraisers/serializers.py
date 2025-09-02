@@ -9,16 +9,20 @@ class FundraiserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PledgeSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.id')
+    supporter = serializers.ReadOnlyField(source='supporter.id')
     
     class Meta:
         model = apps.get_model('fundraisers.Pledge')
         fields = '__all__'
 
+class PledgeDetailSerializer(PledgeSerializer):
+    fundraiser = FundraiserSerializer(read_only=True)
+
+
     def update(self,instance, validated_data):
-        instance.description = validated_data.get('description', instance.description)
-        instance.pledge = validated_data.get('pledge', instance.pledge)
-        instance.supporter = validated_data.get('supporter', instance.supporter)
+        instance.comment = validated_data.get('comment', instance.comment)
+        instance.amount = validated_data.get('amount', instance.amount)
+        instance.anonymous = validated_data.get('anonymous', instance.anonymous)
         instance.save()
         return instance
 

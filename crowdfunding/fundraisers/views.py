@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.http import Http404
 from .models import Fundraiser, Pledge
-from .serializers import FundraiserSerializer, PledgeSerializer, FundraiserDetailSerializer
-from .permissions import IsOwnerOrReadOnly
-from .permissions import IsOwnerOrReadOnlyCustom
+from .serializers import FundraiserSerializer, PledgeSerializer, FundraiserDetailSerializer, PledgeDetailSerializer
+from .permissions import IsOwnerOrReadOnly, IsSupporterOrReadOnly
+
 
 class FundraiserList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -90,7 +90,10 @@ class PledgeList(APIView):
         
 
 class PledgeDetail(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyCustom]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, 
+        IsSupporterOrReadOnly
+    ]
 
     def get_object(self, pk):
         try:
@@ -102,12 +105,12 @@ class PledgeDetail(APIView):
         
     def get(self,request,pk):
         pledge = self.get_object(pk)
-        serializer = PledgeSerializer(pledge)
+        serializer = PledgeDetailSerializer(pledge)
         return Response(serializer.data)
     
     def put(self, request, pk):
         pledge = self.get_object(pk)
-        serializer = PledgeSerializer(pledge, data=request.data, partial=True)
+        serializer = PledgeDetailSerializer(pledge, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
