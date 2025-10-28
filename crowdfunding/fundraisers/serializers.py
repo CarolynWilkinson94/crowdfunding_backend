@@ -10,10 +10,16 @@ class FundraiserSerializer(serializers.ModelSerializer):
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter = serializers.ReadOnlyField(source='supporter.id')
+    supporter_username = serializers.SerializerMethodField()
     
     class Meta:
         model = apps.get_model('fundraisers.Pledge')
         fields = '__all__'
+
+    def get_supporter_username(self, obj):
+        if obj.anonymous:
+            return "Anonymous"
+        return obj.supporter.username
 
 class PledgeDetailSerializer(PledgeSerializer):
     fundraiser = FundraiserSerializer(read_only=True)
