@@ -124,6 +124,9 @@ class PledgeDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def patch(self, request, pk):
+        return self.put(request, pk)
+    
     def delete(self, request, pk):
         pledge = self.get_object(pk)
         pledge.delete()
