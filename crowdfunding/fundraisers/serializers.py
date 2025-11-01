@@ -10,7 +10,7 @@ class FundraiserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_owner_username(self, obj):
-        return obj.owern.username
+        return obj.owner.username
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter = serializers.ReadOnlyField(source='supporter.id')
