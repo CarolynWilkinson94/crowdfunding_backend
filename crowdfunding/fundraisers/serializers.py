@@ -3,10 +3,14 @@ from django.apps import apps
 
 class FundraiserSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
+    owner_username = serializers.SerializerMethodField()
 
     class Meta:
         model = apps.get_model('fundraisers.Fundraiser')
         fields = '__all__'
+
+    def get_owner_username(self, obj):
+        return obj.owern.username
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter = serializers.ReadOnlyField(source='supporter.id')
