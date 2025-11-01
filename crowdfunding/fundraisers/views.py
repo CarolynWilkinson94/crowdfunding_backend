@@ -53,7 +53,6 @@ class FundraiserDetail(APIView):
             instance=fundraiser,
             data=request.data,
             partial=True
-
         )
         if serializer.is_valid():
             serializer.save()
@@ -63,6 +62,9 @@ class FundraiserDetail(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
+    
+    def patch(self, request, pk):
+        return self.put(request, pk)
 
     def delete(self, request, pk):
         fundraiser = self.get_object(pk)
